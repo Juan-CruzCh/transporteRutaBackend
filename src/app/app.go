@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"transporteRuta/src/app/config"
+	"transporteRuta/src/app/middleware"
 	LineaController "transporteRuta/src/internal/linea/controller"
 	LineaRepository "transporteRuta/src/internal/linea/repository"
 	LineaRouter "transporteRuta/src/internal/linea/router"
@@ -80,6 +81,7 @@ func (app *App) Run() {
 	var port string = config.Port
 	log.Printf("Servidor corriendo en el http://localhost:%s", port)
 	var handler http.Handler = app.ServerMux
+	handler = middleware.EnableCORS(handler)
 	err := http.ListenAndServe(":"+port, handler)
 	if err != nil {
 		j, _ := json.MarshalIndent(err, " ", " ")
