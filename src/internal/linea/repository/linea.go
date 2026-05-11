@@ -12,7 +12,7 @@ import (
 
 type Linea interface {
 	CrearLinea(linea *model.Linea, ctx context.Context) error
-	ListarLinea(id *bson.ObjectID, ctx context.Context) (interface{}, error)
+	ListarLinea(ctx context.Context) (*[]model.Linea, error)
 	ActualizarLinea(id *bson.ObjectID, linea *model.Linea, ctx context.Context) error
 	EliminarLinea(id *bson.ObjectID, ctx context.Context) error
 }
@@ -37,8 +37,20 @@ func (r *linea) CrearLinea(linea *model.Linea, ctx context.Context) error {
 	return nil
 }
 
-func (r *linea) ListarLinea(id *bson.ObjectID, ctx context.Context) (interface{}, error) {
-	return nil, nil
+func (r *linea) ListarLinea(ctx context.Context) (*[]model.Linea, error) {
+
+	var data []model.Linea = []model.Linea{}
+
+	cursor, err := r.collection.Find(ctx, bson.M{"flag": enum.FlagNuevo})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+	err = cursor.All(ctx, &data)
+	if err != nil {
+		return nil, err
+	}
+	return &data, nil
 }
 
 func (r *linea) ActualizarLinea(id *bson.ObjectID, linea *model.Linea, ctx context.Context) error {

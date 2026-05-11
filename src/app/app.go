@@ -90,7 +90,7 @@ func (app *App) Run() {
 
 func initLinea(app *App) {
 	LineaService := LineaService.NewLineaService(app.Repositories.LineaRepository, app.Cliente)
-	LineaController := LineaController.NewLineaController(LineaService)
+	LineaController := LineaController.NewLineaController(LineaService, app.Validate)
 	LineaRouter.NewLineaRouter(app.ServerMux, LineaController)
 }
 
