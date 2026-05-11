@@ -6,4 +6,5 @@ import (
 )
 
 func NewRutaRouter(mux *http.ServeMux, controller *controller.Ruta) {
+	mux.HandleFunc("POST /api/ruta", controller.CrearRuta)
 }

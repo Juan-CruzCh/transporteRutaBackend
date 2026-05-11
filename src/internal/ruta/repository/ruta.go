@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"transporteRuta/src/app/enum"
+	"transporteRuta/src/app/utils"
 	"transporteRuta/src/internal/ruta/model"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -26,6 +28,12 @@ func NewRutaRepository(db *mongo.Database) *ruta {
 }
 
 func (r *ruta) CrearRuta(ruta *model.Ruta, ctx context.Context) error {
+	ruta.Fecha = utils.FechaHoraBolivia()
+	ruta.Flag = enum.FlagNuevo
+	_, err := r.collection.InsertOne(ctx, ruta)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

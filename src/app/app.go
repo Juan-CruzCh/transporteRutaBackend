@@ -6,16 +6,45 @@ import (
 	"log"
 	"net/http"
 	"transporteRuta/src/app/config"
+	LineaController "transporteRuta/src/internal/linea/controller"
+	LineaRepository "transporteRuta/src/internal/linea/repository"
+	LineaRouter "transporteRuta/src/internal/linea/router"
+	LineaService "transporteRuta/src/internal/linea/service"
+
+	RutaRepository "transporteRuta/src/internal/ruta/repository"
+
+	RutaController "transporteRuta/src/internal/ruta/controller"
+	RutaRouter "transporteRuta/src/internal/ruta/router"
+	RutaService "transporteRuta/src/internal/ruta/service"
+
+	UbicacionController "transporteRuta/src/internal/ubicacion/controller"
+	UbicacionRepository "transporteRuta/src/internal/ubicacion/repository"
+	UbicacionRouter "transporteRuta/src/internal/ubicacion/router"
+	UbicacionService "transporteRuta/src/internal/ubicacion/service"
+
+	UsuarioController "transporteRuta/src/internal/usuario/controller"
+	UsuarioRepository "transporteRuta/src/internal/usuario/repository"
+	UsuarioRouter "transporteRuta/src/internal/usuario/router"
+	UsuarioService "transporteRuta/src/internal/usuario/service"
 
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type Repositories struct {
+	LineaRepository     LineaRepository.Linea
+	RutaRepository      RutaRepository.Ruta
+	UbicacionRepository UbicacionRepository.Ubicacion
+	UsuarioRepository   UsuarioRepository.Usuario
 }
 
 func NewRepositories(db *mongo.Database) *Repositories {
-	return &Repositories{}
+	return &Repositories{
+		LineaRepository:     LineaRepository.NewLineaRepository(db),
+		RutaRepository:      RutaRepository.NewRutaRepository(db),
+		UbicacionRepository: UbicacionRepository.NewUbicacionRepository(db),
+		UsuarioRepository:   UsuarioRepository.NewUsuarioRepository(db),
+	}
 }
 
 type App struct {
@@ -26,7 +55,7 @@ type App struct {
 }
 
 func StartApp() *App {
-	db, cliente, err := config.ConnectMongo("", "")
+	db, cliente, err := config.ConnectMongo(config.UrlMongo, "transporte")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,11 +68,16 @@ func StartApp() *App {
 		Validate:     validate,
 		Cliente:      cliente,
 	}
+	initLinea(app)
+	initRuta(app)
+	initUbicacion(app)
+	initUsuario(app)
+
 	return app
 
 }
 func (app *App) Run() {
-	var port string = "3000"
+	var port string = config.Port
 	log.Printf("Servidor corriendo en el http://localhost:%s", port)
 	var handler http.Handler = app.ServerMux
 	err := http.ListenAndServe(":"+port, handler)
@@ -52,4 +86,50 @@ func (app *App) Run() {
 		fmt.Println(err, string(j))
 		log.Fatal(err, string(j))
 	}
+}
+
+func initLinea(app *App) {
+	LineaService := LineaService.NewLineaService(app.Repositories.LineaRepository, app.Cliente)
+	LineaController := LineaController.NewLineaController(LineaService)
+	LineaRouter.NewLineaRouter(app.ServerMux, LineaController)
+}
+
+func initRuta(app *App) {
+	RutaService := RutaService.NewRutaService(app.Repositories.RutaRepository, app.Cliente)
+	RutaController := RutaController.NewRutaController(RutaService, app.Validate)
+	RutaRouter.NewRutaRouter(app.ServerMux, RutaController)
+
+}
+func initUbicacion(app *App) {
+	UbicacionService := UbicacionService.NewUbicacionService(
+		app.Repositories.UbicacionRepository,
+		app.Cliente,
+	)
+
+	UbicacionController := UbicacionController.NewUbicacionController(
+		UbicacionService,
+	)
+
+	UbicacionRouter.NewUbicacionRouter(
+		app.ServerMux,
+		UbicacionController,
+	)
+
+}
+
+func initUsuario(app *App) {
+	UsuarioService := UsuarioService.NewUsuarioService(
+		app.Repositories.UsuarioRepository,
+		app.Cliente,
+	)
+
+	UsuarioController := UsuarioController.NewUsuarioController(
+		UsuarioService,
+	)
+
+	UsuarioRouter.NewUsuarioRouter(
+		app.ServerMux,
+		UsuarioController,
+	)
+
 }

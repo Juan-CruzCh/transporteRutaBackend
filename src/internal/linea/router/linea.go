@@ -6,4 +6,5 @@ import (
 )
 
 func NewLineaRouter(mux *http.ServeMux, controller *controller.Linea) {
+	mux.HandleFunc("GET /api/linea/listar", controller.ListarLinea)
 }
