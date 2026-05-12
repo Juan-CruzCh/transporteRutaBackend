@@ -16,13 +16,12 @@ type Usuario interface {
 }
 
 type usuario struct {
-	db         *mongo.Database
 	collection *mongo.Collection
 }
 
 func NewUsuarioRepository(db *mongo.Database) *usuario {
 	collection := db.Collection("Usuario")
-	return &usuario{db: db, collection: collection}
+	return &usuario{collection: collection}
 }
 
 func (r *usuario) CrearUsuario(usuario *model.Usuario, ctx context.Context) error {

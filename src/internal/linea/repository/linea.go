@@ -18,13 +18,12 @@ type Linea interface {
 }
 
 type linea struct {
-	db         *mongo.Database
 	collection *mongo.Collection
 }
 
 func NewLineaRepository(db *mongo.Database) *linea {
 	collection := db.Collection("Linea")
-	return &linea{db: db, collection: collection}
+	return &linea{collection: collection}
 }
 
 func (r *linea) CrearLinea(linea *model.Linea, ctx context.Context) error {

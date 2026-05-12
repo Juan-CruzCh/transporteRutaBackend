@@ -16,13 +16,12 @@ type DetalleLinea interface {
 }
 
 type detalleLinea struct {
-	db         *mongo.Database
 	collection *mongo.Collection
 }
 
 func NewDetalleLineaRepository(db *mongo.Database) *detalleLinea {
 	collection := db.Collection("DetalleLinea")
-	return &detalleLinea{db: db, collection: collection}
+	return &detalleLinea{collection: collection}
 }
 
 func (r *detalleLinea) CrearDetalleLinea(detalleLinea *model.DetalleLinea, ctx context.Context) error {

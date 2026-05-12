@@ -16,13 +16,12 @@ type Ubicacion interface {
 }
 
 type ubicacion struct {
-	db         *mongo.Database
 	collection *mongo.Collection
 }
 
 func NewUbicacionRepository(db *mongo.Database) *ubicacion {
 	collection := db.Collection("Ubicacion")
-	return &ubicacion{db: db, collection: collection}
+	return &ubicacion{collection: collection}
 }
 
 func (r *ubicacion) CrearUbicacion(ubicacion *model.Ubicacion, ctx context.Context) error {

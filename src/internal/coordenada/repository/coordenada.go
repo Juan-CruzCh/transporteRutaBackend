@@ -18,13 +18,12 @@ type Coordenada interface {
 }
 
 type coordenada struct {
-	db         *mongo.Database
 	collection *mongo.Collection
 }
 
 func NewCoordenadaRepository(db *mongo.Database) *coordenada {
 	collection := db.Collection("Coordenada")
-	return &coordenada{db: db, collection: collection}
+	return &coordenada{collection: collection}
 }
 
 func (r *coordenada) CrearCoordenada(coordenada *model.Coordenada, ctx context.Context) error {

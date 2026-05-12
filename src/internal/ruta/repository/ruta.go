@@ -19,13 +19,12 @@ type Ruta interface {
 }
 
 type ruta struct {
-	db         *mongo.Database
 	collection *mongo.Collection
 }
 
 func NewRutaRepository(db *mongo.Database) *ruta {
 	collection := db.Collection("Ruta")
-	return &ruta{db: db, collection: collection}
+	return &ruta{collection: collection}
 }
 
 func (r *ruta) CrearRuta(ruta *model.Ruta, ctx context.Context) (*bson.ObjectID, error) {

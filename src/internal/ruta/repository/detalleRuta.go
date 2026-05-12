@@ -15,13 +15,12 @@ type DetalleRuta interface {
 	EliminarDetalleRuta(id *bson.ObjectID, ctx context.Context) error
 }
 type detalleRuta struct {
-	db         *mongo.Database
 	collection *mongo.Collection
 }
 
 func NewDetalleRutaRepository(db *mongo.Database) *detalleRuta {
 	collection := db.Collection("DetalleRuta")
-	return &detalleRuta{db: db, collection: collection}
+	return &detalleRuta{collection: collection}
 }
 
 func (r *detalleRuta) CrearDetalleRuta(detalleRuta *model.DetalleRuta, ctx context.Context) error {
