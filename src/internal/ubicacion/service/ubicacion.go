@@ -22,6 +22,7 @@ func NewUbicacionService(ubicacionRepository repository.Ubicacion, cliente *mong
 }
 
 func (s *Ubicacion) CrearUbicacion(ubicacion *dto.UbicacionDto, ctx context.Context) error {
+
 	return nil
 }
 
