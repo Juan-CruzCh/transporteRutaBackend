@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"transporteRuta/src/app/enum"
+	"transporteRuta/src/app/utils"
 	"transporteRuta/src/internal/coordenada/model"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -26,7 +28,12 @@ func NewCoordenadaRepository(db *mongo.Database) *coordenada {
 }
 
 func (r *coordenada) CrearCoordenada(coordenada *model.Coordenada, ctx context.Context) error {
-
+	coordenada.Fecha = utils.FechaHoraBolivia()
+	coordenada.Flag = enum.FlagNuevo
+	_, err := r.collection.InsertOne(ctx, coordenada)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

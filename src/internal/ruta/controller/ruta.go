@@ -37,14 +37,13 @@ func (c *Ruta) CrearRuta(w http.ResponseWriter, r *http.Request) {
 		utils.ResponseJSON(w, http.StatusBadRequest, map[string]string{"mensaje": err.Error()})
 		return
 	}
-
-	err =
+	resultado, err :=
 		c.rutaService.CrearRuta(&body, ctx)
 	if err != nil {
 		utils.ResponseJSON(w, http.StatusBadRequest, err)
 		return
 	}
-	utils.ResponseJSON(w, http.StatusCreated, map[string]string{"mensaje": "registrado"})
+	utils.ResponseJSON(w, http.StatusCreated, resultado)
 }
 
 func (c *Ruta) ListarRuta(w http.ResponseWriter, r *http.Request) {

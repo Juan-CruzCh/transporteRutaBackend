@@ -11,14 +11,16 @@ import (
 )
 
 type Linea struct {
-	lineaRepository repository.Linea
-	cliente         *mongo.Client
+	lineaRepository       repository.Linea
+	DetalleRutaRepository repository.DetalleLinea
+	cliente               *mongo.Client
 }
 
-func NewLineaService(lineaRepository repository.Linea, cliente *mongo.Client) *Linea {
+func NewLineaService(lineaRepository repository.Linea, DetalleRutaRepository repository.DetalleLinea, cliente *mongo.Client) *Linea {
 	return &Linea{
-		lineaRepository: lineaRepository,
-		cliente:         cliente,
+		lineaRepository:       lineaRepository,
+		DetalleRutaRepository: DetalleRutaRepository,
+		cliente:               cliente,
 	}
 }
 

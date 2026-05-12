@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"transporteRuta/src/internal/coordenada/model"
 	"transporteRuta/src/internal/coordenada/repository"
 
 	"transporteRuta/src/internal/coordenada/dto"
@@ -23,7 +24,14 @@ func NewCoordenadaService(coordenadaRepository repository.Coordenada, cliente *m
 }
 
 func (s *Coordenada) CrearCoordenada(coordenada *dto.CoordenadaDto, ctx context.Context) error {
-
+	data := model.Coordenada{
+		Latitud:  coordenada.Latitud,
+		Longitud: coordenada.Longitud,
+	}
+	err := s.coordenadaRepository.CrearCoordenada(&data, ctx)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

@@ -13,5 +13,4 @@ type Coordenada struct {
 	Flag     enum.FlagE    `bson:"flag" json:"flag"`
 	Latitud  float64       `bson:"latitud" json:"latitud"`
 	Longitud float64       `bson:"longitud" json:"longitud"`
-	Ruta     bson.ObjectID `bson:"ruta" json:"ruta"`
 }

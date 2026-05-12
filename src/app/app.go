@@ -38,20 +38,24 @@ import (
 )
 
 type Repositories struct {
-	LineaRepository      LineaRepository.Linea
-	RutaRepository       RutaRepository.Ruta
-	UbicacionRepository  UbicacionRepository.Ubicacion
-	UsuarioRepository    UsuarioRepository.Usuario
-	CoordenadaRepository CoordenadaRepository.Coordenada
+	LineaRepository        LineaRepository.Linea
+	DetalleLineaRepository LineaRepository.DetalleLinea
+	RutaRepository         RutaRepository.Ruta
+	DetalleRutaRepository  RutaRepository.DetalleRuta
+	UbicacionRepository    UbicacionRepository.Ubicacion
+	UsuarioRepository      UsuarioRepository.Usuario
+	CoordenadaRepository   CoordenadaRepository.Coordenada
 }
 
 func NewRepositories(db *mongo.Database) *Repositories {
 	return &Repositories{
-		LineaRepository:      LineaRepository.NewLineaRepository(db),
-		RutaRepository:       RutaRepository.NewRutaRepository(db),
-		UbicacionRepository:  UbicacionRepository.NewUbicacionRepository(db),
-		UsuarioRepository:    UsuarioRepository.NewUsuarioRepository(db),
-		CoordenadaRepository: CoordenadaRepository.NewCoordenadaRepository(db),
+		LineaRepository:        LineaRepository.NewLineaRepository(db),
+		RutaRepository:         RutaRepository.NewRutaRepository(db),
+		UbicacionRepository:    UbicacionRepository.NewUbicacionRepository(db),
+		UsuarioRepository:      UsuarioRepository.NewUsuarioRepository(db),
+		CoordenadaRepository:   CoordenadaRepository.NewCoordenadaRepository(db),
+		DetalleLineaRepository: LineaRepository.NewDetalleLineaRepository(db),
+		DetalleRutaRepository:  RutaRepository.NewDetalleRutaRepository(db),
 	}
 }
 
@@ -80,6 +84,7 @@ func StartApp() *App {
 	initRuta(app)
 	initUbicacion(app)
 	initUsuario(app)
+	initCoordenada(app)
 
 	return app
 
@@ -98,13 +103,13 @@ func (app *App) Run() {
 }
 
 func initLinea(app *App) {
-	LineaService := LineaService.NewLineaService(app.Repositories.LineaRepository, app.Cliente)
+	LineaService := LineaService.NewLineaService(app.Repositories.LineaRepository, app.Repositories.DetalleLineaRepository, app.Cliente)
 	LineaController := LineaController.NewLineaController(LineaService, app.Validate)
 	LineaRouter.NewLineaRouter(app.ServerMux, LineaController)
 }
 
 func initRuta(app *App) {
-	RutaService := RutaService.NewRutaService(app.Repositories.RutaRepository, app.Cliente)
+	RutaService := RutaService.NewRutaService(app.Repositories.RutaRepository, app.Repositories.DetalleRutaRepository, app.Cliente)
 	RutaController := RutaController.NewRutaController(RutaService, app.Validate)
 	RutaRouter.NewRutaRouter(app.ServerMux, RutaController)
 
@@ -144,7 +149,7 @@ func initUsuario(app *App) {
 }
 func initCoordenada(app *App) {
 	CoordenadaService := CoordenadaService.NewCoordenadaService(app.Repositories.CoordenadaRepository, app.Cliente)
-	CoordenadaController := CoordenadaController.NewCoordenadaController(CoordenadaService)
+	CoordenadaController := CoordenadaController.NewCoordenadaController(CoordenadaService, app.Validate)
 	CoordenadaRouter.NewCoordenadaRouter(app.ServerMux, CoordenadaController)
 
 }

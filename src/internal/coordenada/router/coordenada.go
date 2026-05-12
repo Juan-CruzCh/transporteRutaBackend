@@ -6,4 +6,5 @@ import (
 )
 
 func NewCoordenadaRouter(mux *http.ServeMux, controller *controller.Coordenada) {
+	mux.HandleFunc("POST /api/coordenada", controller.CrearCoordenada)
 }

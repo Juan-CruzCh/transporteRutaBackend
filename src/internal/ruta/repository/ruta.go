@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"transporteRuta/src/app/enum"
 	"transporteRuta/src/app/utils"
 	"transporteRuta/src/internal/ruta/model"
@@ -11,7 +12,7 @@ import (
 )
 
 type Ruta interface {
-	CrearRuta(ruta *model.Ruta, ctx context.Context) error
+	CrearRuta(ruta *model.Ruta, ctx context.Context) (*bson.ObjectID, error)
 	ListarRuta(id *bson.ObjectID, ctx context.Context) (interface{}, error)
 	ActualizarRuta(id *bson.ObjectID, ruta *model.Ruta, ctx context.Context) error
 	EliminarRuta(id *bson.ObjectID, ctx context.Context) error
@@ -27,15 +28,18 @@ func NewRutaRepository(db *mongo.Database) *ruta {
 	return &ruta{db: db, collection: collection}
 }
 
-func (r *ruta) CrearRuta(ruta *model.Ruta, ctx context.Context) error {
-
+func (r *ruta) CrearRuta(ruta *model.Ruta, ctx context.Context) (*bson.ObjectID, error) {
 	ruta.Fecha = utils.FechaHoraBolivia()
 	ruta.Flag = enum.FlagNuevo
-	_, err := r.collection.InsertOne(ctx, ruta)
+	resultado, err := r.collection.InsertOne(ctx, ruta)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	ID, ok := resultado.InsertedID.(bson.ObjectID)
+	if !ok {
+		return nil, fmt.Errorf("Error de parseo")
+	}
+	return &ID, nil
 }
 
 func (r *ruta) ListarRuta(id *bson.ObjectID, ctx context.Context) (interface{}, error) {
