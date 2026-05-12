@@ -8,9 +8,9 @@ import (
 )
 
 type Ruta struct {
-	ID       bson.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	Fecha    time.Time     `bson:"fecha" json:"fecha"`
-	Latitud  float64       `bson:"latitud" json:"latitud"`
-	Longitud float64       `bson:"longitud" json:"longitud"`
-	Flag     enum.FlagE    `bson:"flag" json:"flag"`
+	ID     bson.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Fecha  time.Time     `bson:"fecha" json:"fecha"`
+	Nombre string        `bson:"nombre" json:"nombre"`
+	Color  string        `bson:"color" json:"color"`
+	Flag   enum.FlagE    `bson:"flag" json:"flag"`
 }

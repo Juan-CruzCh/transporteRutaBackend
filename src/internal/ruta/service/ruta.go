@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"transporteRuta/src/internal/ruta/dto"
-	"transporteRuta/src/internal/ruta/model"
 	"transporteRuta/src/internal/ruta/repository"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -23,15 +22,14 @@ func NewRutaService(rutaRepository repository.Ruta, cliente *mongo.Client) *Ruta
 }
 
 func (s *Ruta) CrearRuta(ruta *dto.RutaDto, ctx context.Context) error {
-
-	data := model.Ruta{
+	/*data := model.Ruta{
 		Latitud:  ruta.Latitud,
 		Longitud: ruta.Longitud,
 	}
 	err := s.rutaRepository.CrearRuta(&data, ctx)
 	if err != nil {
 		return err
-	}
+	}*/
 	return nil
 }
 

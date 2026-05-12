@@ -28,23 +28,30 @@ import (
 	UsuarioRouter "transporteRuta/src/internal/usuario/router"
 	UsuarioService "transporteRuta/src/internal/usuario/service"
 
+	CoordenadaController "transporteRuta/src/internal/coordenada/controller"
+	CoordenadaRepository "transporteRuta/src/internal/coordenada/repository"
+	CoordenadaRouter "transporteRuta/src/internal/coordenada/router"
+	CoordenadaService "transporteRuta/src/internal/coordenada/service"
+
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type Repositories struct {
-	LineaRepository     LineaRepository.Linea
-	RutaRepository      RutaRepository.Ruta
-	UbicacionRepository UbicacionRepository.Ubicacion
-	UsuarioRepository   UsuarioRepository.Usuario
+	LineaRepository      LineaRepository.Linea
+	RutaRepository       RutaRepository.Ruta
+	UbicacionRepository  UbicacionRepository.Ubicacion
+	UsuarioRepository    UsuarioRepository.Usuario
+	CoordenadaRepository CoordenadaRepository.Coordenada
 }
 
 func NewRepositories(db *mongo.Database) *Repositories {
 	return &Repositories{
-		LineaRepository:     LineaRepository.NewLineaRepository(db),
-		RutaRepository:      RutaRepository.NewRutaRepository(db),
-		UbicacionRepository: UbicacionRepository.NewUbicacionRepository(db),
-		UsuarioRepository:   UsuarioRepository.NewUsuarioRepository(db),
+		LineaRepository:      LineaRepository.NewLineaRepository(db),
+		RutaRepository:       RutaRepository.NewRutaRepository(db),
+		UbicacionRepository:  UbicacionRepository.NewUbicacionRepository(db),
+		UsuarioRepository:    UsuarioRepository.NewUsuarioRepository(db),
+		CoordenadaRepository: CoordenadaRepository.NewCoordenadaRepository(db),
 	}
 }
 
@@ -133,5 +140,11 @@ func initUsuario(app *App) {
 		app.ServerMux,
 		UsuarioController,
 	)
+
+}
+func initCoordenada(app *App) {
+	CoordenadaService := CoordenadaService.NewCoordenadaService(app.Repositories.CoordenadaRepository, app.Cliente)
+	CoordenadaController := CoordenadaController.NewCoordenadaController(CoordenadaService)
+	CoordenadaRouter.NewCoordenadaRouter(app.ServerMux, CoordenadaController)
 
 }
