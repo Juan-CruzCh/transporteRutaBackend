@@ -46,6 +46,14 @@ func (c *Coordenada) CrearCoordenada(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Coordenada) ListarCoordenada(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+	defer cancel()
+	data, err := c.coordenadaService.ListarCoordenada(ctx)
+	if err != nil {
+		utils.ResponseJSON(w, http.StatusBadRequest, map[string]string{"mensaje": err.Error()})
+		return
+	}
+	utils.ResponseJSON(w, http.StatusOK, data)
 }
 
 func (c *Coordenada) ActualizarCoordenada(w http.ResponseWriter, r *http.Request) {

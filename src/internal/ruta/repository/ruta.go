@@ -13,7 +13,7 @@ import (
 
 type Ruta interface {
 	CrearRuta(ruta *model.Ruta, ctx context.Context) (*bson.ObjectID, error)
-	ListarRuta(id *bson.ObjectID, ctx context.Context) (interface{}, error)
+	ListarRuta(ctx context.Context) (*[]model.Ruta, error)
 	ActualizarRuta(id *bson.ObjectID, ruta *model.Ruta, ctx context.Context) error
 	EliminarRuta(id *bson.ObjectID, ctx context.Context) error
 }
@@ -42,8 +42,23 @@ func (r *ruta) CrearRuta(ruta *model.Ruta, ctx context.Context) (*bson.ObjectID,
 	return &ID, nil
 }
 
-func (r *ruta) ListarRuta(id *bson.ObjectID, ctx context.Context) (interface{}, error) {
-	return nil, nil
+func (r *ruta) ListarRuta(ctx context.Context) (*[]model.Ruta, error) {
+	cursor, err := r.collection.Find(ctx, bson.M{"flag": enum.FlagNuevo})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+	var data []model.Ruta = []model.Ruta{}
+	for cursor.Next(ctx) {
+		var r model.Ruta
+		err = cursor.Decode(&r)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, r)
+
+	}
+	return &data, nil
 }
 
 func (r *ruta) ActualizarRuta(id *bson.ObjectID, ruta *model.Ruta, ctx context.Context) error {

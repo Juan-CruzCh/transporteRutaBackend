@@ -36,8 +36,12 @@ func (s *Ruta) CrearRuta(ruta *dto.RutaDto, ctx context.Context) (*map[string]bs
 	return &map[string]bson.ObjectID{"ruta": *id}, nil
 }
 
-func (s *Ruta) ListarRuta(id *bson.ObjectID, ctx context.Context) (interface{}, error) {
-	return nil, nil
+func (s *Ruta) ListarRuta(ctx context.Context) (*[]model.Ruta, error) {
+	data, err := s.rutaRepository.ListarRuta(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 func (s *Ruta) ActualizarRuta(id *bson.ObjectID, ruta *dto.RutaDto, ctx context.Context) error {

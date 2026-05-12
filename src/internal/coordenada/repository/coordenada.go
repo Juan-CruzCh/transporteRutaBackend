@@ -12,7 +12,7 @@ import (
 
 type Coordenada interface {
 	CrearCoordenada(coordenada *model.Coordenada, ctx context.Context) error
-	ListarCoordenada(id *bson.ObjectID, ctx context.Context) (interface{}, error)
+	ListarCoordenada(ctx context.Context) (*[]model.Coordenada, error)
 	ActualizarCoordenada(id *bson.ObjectID, coordenada *model.Coordenada, ctx context.Context) error
 	EliminarCoordenada(id *bson.ObjectID, ctx context.Context) error
 }
@@ -37,8 +37,22 @@ func (r *coordenada) CrearCoordenada(coordenada *model.Coordenada, ctx context.C
 	return nil
 }
 
-func (r *coordenada) ListarCoordenada(id *bson.ObjectID, ctx context.Context) (interface{}, error) {
-	return nil, nil
+func (r *coordenada) ListarCoordenada(ctx context.Context) (*[]model.Coordenada, error) {
+	cursor, err := r.collection.Find(ctx, bson.M{"flag": enum.FlagNuevo})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+	var data []model.Coordenada = []model.Coordenada{}
+	for cursor.Next(ctx) {
+		var c model.Coordenada
+		err = cursor.Decode(&c)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, c)
+	}
+	return &data, nil
 }
 
 func (r *coordenada) ActualizarCoordenada(id *bson.ObjectID, coordenada *model.Coordenada, ctx context.Context) error {

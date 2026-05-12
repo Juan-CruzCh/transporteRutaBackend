@@ -35,8 +35,13 @@ func (s *Coordenada) CrearCoordenada(coordenada *dto.CoordenadaDto, ctx context.
 	return nil
 }
 
-func (s *Coordenada) ListarCoordenada(id *bson.ObjectID, ctx context.Context) (interface{}, error) {
-	return nil, nil
+func (s *Coordenada) ListarCoordenada(ctx context.Context) (*[]model.Coordenada, error) {
+
+	data, err := s.coordenadaRepository.ListarCoordenada(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 func (s *Coordenada) ActualizarCoordenada(id *bson.ObjectID, coordenada *dto.CoordenadaDto, ctx context.Context) error {
