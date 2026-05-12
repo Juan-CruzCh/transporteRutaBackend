@@ -26,6 +26,7 @@ func NewCoordenadaRepository(db *mongo.Database) *coordenada {
 }
 
 func (r *coordenada) CrearCoordenada(coordenada *model.Coordenada, ctx context.Context) error {
+
 	return nil
 }
 

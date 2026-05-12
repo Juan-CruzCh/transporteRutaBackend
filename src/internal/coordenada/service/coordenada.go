@@ -23,6 +23,7 @@ func NewCoordenadaService(coordenadaRepository repository.Coordenada, cliente *m
 }
 
 func (s *Coordenada) CrearCoordenada(coordenada *dto.CoordenadaDto, ctx context.Context) error {
+
 	return nil
 }
 

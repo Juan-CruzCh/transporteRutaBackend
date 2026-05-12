@@ -15,6 +15,7 @@ func NewCoordenadaController(coordenadaService *service.Coordenada) *Coordenada 
 	}
 }
 func (c *Coordenada) CrearCoordenada(w http.ResponseWriter, r *http.Request) {
+
 }
 
 func (c *Coordenada) ListarCoordenada(w http.ResponseWriter, r *http.Request) {

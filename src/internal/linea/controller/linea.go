@@ -44,6 +44,7 @@ func (c *Linea) CrearLinea(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	utils.ResponseJSON(w, http.StatusCreated, map[string]string{"mensaje": "registrado"})
+
 }
 
 func (c *Linea) ListarLinea(w http.ResponseWriter, r *http.Request) {
