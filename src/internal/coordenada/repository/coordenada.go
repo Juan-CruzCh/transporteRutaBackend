@@ -52,6 +52,10 @@ func (r *coordenada) ListarCoordenada(ctx context.Context) (*[]model.Coordenada,
 		}
 		data = append(data, c)
 	}
+	err = cursor.Err()
+	if err != nil {
+		return nil, err
+	}
 	return &data, nil
 }
 

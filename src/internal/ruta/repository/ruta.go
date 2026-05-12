@@ -58,6 +58,10 @@ func (r *ruta) ListarRuta(ctx context.Context) (*[]model.Ruta, error) {
 		data = append(data, r)
 
 	}
+	err = cursor.Err()
+	if err != nil {
+		return nil, err
+	}
 	return &data, nil
 }
 
