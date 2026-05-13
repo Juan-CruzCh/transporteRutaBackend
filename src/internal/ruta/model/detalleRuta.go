@@ -13,5 +13,5 @@ type DetalleRuta struct {
 	Flag       enum.FlagE    `bson:"flag" json:"flag"`
 	Coordenada bson.ObjectID `bson:"coordenada" json:"coordenada"`
 	Ruta       bson.ObjectID `bson:"ruta" json:"ruta"`
-	EsParada   bool          `bson:"es_parada" json:"es_parada"`
+	EsParada   bool          `bson:"esParada" json:"esParada"`
 }

@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"transporteRuta/src/app/enum"
+	"transporteRuta/src/app/utils"
 	"transporteRuta/src/internal/linea/model"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -25,6 +27,12 @@ func NewDetalleLineaRepository(db *mongo.Database) *detalleLinea {
 }
 
 func (r *detalleLinea) CrearDetalleLinea(detalleLinea *model.DetalleLinea, ctx context.Context) error {
+	detalleLinea.Fecha = utils.FechaHoraBolivia()
+	detalleLinea.Flag = enum.FlagNuevo
+	_, err := r.collection.InsertOne(ctx, detalleLinea)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

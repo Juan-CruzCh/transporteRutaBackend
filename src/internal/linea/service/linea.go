@@ -45,6 +45,17 @@ func (s *Linea) ListarLinea(ctx context.Context) (*[]model.Linea, error) {
 	return data, nil
 }
 
+func (s *Linea) CrearDetalleLinea(linea *dto.DetalleLineaDto, ctx context.Context) error {
+	data := model.DetalleLinea{
+		Ruta:  linea.Ruta,
+		Linea: linea.Linea,
+	}
+	err := s.DetalleRutaRepository.CrearDetalleLinea(&data, ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func (s *Linea) ActualizarLinea(id *bson.ObjectID, linea *dto.LineaDto, ctx context.Context) error {
 	return nil
 }

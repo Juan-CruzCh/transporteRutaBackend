@@ -47,6 +47,28 @@ func (c *Linea) CrearLinea(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (c *Linea) CrearDetalleLinea(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+	defer cancel()
+	var body dto.DetalleLineaDto
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		utils.ResponseJSON(w, http.StatusBadRequest, map[string]string{"mensaje": err.Error()})
+		return
+	}
+	err = c.Validate.Struct(&body)
+	if err != nil {
+		utils.ResponseJSON(w, http.StatusBadRequest, map[string]string{"mensaje": err.Error()})
+		return
+	}
+	err = c.lineaService.CrearDetalleLinea(&body, ctx)
+	if err != nil {
+		utils.ResponseJSON(w, http.StatusCreated, map[string]string{"mensaje": err.Error()})
+		return
+	}
+	utils.ResponseJSON(w, http.StatusCreated, map[string]string{"mensaje": "registrado"})
+
+}
 func (c *Linea) ListarLinea(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
 	defer cancel()

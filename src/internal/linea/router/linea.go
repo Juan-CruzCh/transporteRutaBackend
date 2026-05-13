@@ -8,4 +8,5 @@ import (
 func NewLineaRouter(mux *http.ServeMux, controller *controller.Linea) {
 	mux.HandleFunc("GET /api/linea/listar", controller.ListarLinea)
 	mux.HandleFunc("POST /api/linea/crear", controller.CrearLinea)
+	mux.HandleFunc("POST /api/linea/detalle", controller.CrearDetalleLinea)
 }

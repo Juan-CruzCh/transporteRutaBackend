@@ -46,6 +46,29 @@ func (c *Ruta) CrearRuta(w http.ResponseWriter, r *http.Request) {
 	utils.ResponseJSON(w, http.StatusCreated, resultado)
 }
 
+func (c *Ruta) CrearDetalleRuta(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+	defer cancel()
+	var body dto.DetalleRutaDto
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		utils.ResponseJSON(w, http.StatusBadRequest, map[string]string{"mensaje": err.Error()})
+		return
+	}
+
+	err = c.Validate.Struct(&body)
+	if err != nil {
+		utils.ResponseJSON(w, http.StatusBadRequest, map[string]string{"mensaje": err.Error()})
+		return
+	}
+	err = c.rutaService.CrearDetalleRuta(&body, ctx)
+	if err != nil {
+		utils.ResponseJSON(w, http.StatusBadRequest, map[string]string{"mensaje": err.Error()})
+		return
+	}
+	utils.ResponseJSON(w, http.StatusCreated, map[string]string{"mensaje": "registrado"})
+}
+
 func (c *Ruta) ListarRuta(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
 	defer cancel()
